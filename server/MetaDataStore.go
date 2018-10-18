@@ -10,10 +10,21 @@ type File struct{
 }
 
 type MetadataStore struct{
-  blockStore BlockStore
+  blockStore *;.  BlockStore
   fileCollection map[string]data.FileInfo
 }
 
+/*
+MetadataStore constructor
+*/
+NewMetadataStore(){
+  ms := make(MetadataStore)
+  // TODO: setup servce configuration
+
+  // setup blockstore instance
+  ms.blockStore = BlockStore.NewBlockStore()
+  return ms
+}
 /*
 Read and return the requested file
 return FileInfo object to the client
@@ -30,9 +41,10 @@ return FileInfo object to the client
 
 /*
 client upload a file, server find out missing block and return the missing block
-for client to upload
+for client to upload, then client upload the missing blocks. Once the missing blocks
+are uploaded to blockstore, server will update it's fileCollection
 */
-(MetadataStore s) modifyFile(file data.FileInfo){
+(MetadataStore s) modifyFile(file data.FileInfo) (){
   upload_version := file.version
   cur_version := 0
   fname := file.filename
@@ -45,5 +57,18 @@ for client to upload
       responseObserver.onNext(response);
       responseObserver.onCompleted();
       return;
+  }
+
+  // check whether all blocks are in block store
+  missingBlockList := make([]String)
+  for block := file.blocklist {
+    if(!s.blockStore.HasBlock(block)){
+      missingBlockList.append(block)
+    }
+  }
+
+  // notify client there are missing blocks
+  if(len(missingBlockList) != 0){
+    return;
   }
 }

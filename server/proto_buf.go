@@ -23,15 +23,20 @@ const(
 
 type Block struct {
   hash string
-  data bytes
+  data string
 }
 
-type WriteResult{
+type WriteResult {
   result Result
   current_version int32
   missing_blocks []string
 }
 
+type SimpleAnswer struct{
+  answer bool
+}
 type NodeList struct{
   nodeList []int32
 }
+
+type Empty struct{}

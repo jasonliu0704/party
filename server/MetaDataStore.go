@@ -1,7 +1,7 @@
 package MetadataStore
 
 import "bytes"
-import "data"
+import "proto_buf"
 
 
 type File struct{
@@ -44,7 +44,7 @@ client upload a file, server find out missing block and return the missing block
 for client to upload, then client upload the missing blocks. Once the missing blocks
 are uploaded to blockstore, server will update it's fileCollection
 */
-(MetadataStore s) modifyFile(file data.FileInfo) (){
+(MetadataStore s) modifyFile(file data.FileInfo) (proto_buf.WriteResult){
   upload_version := file.version
   cur_version := 0
   fname := file.filename
@@ -56,7 +56,7 @@ are uploaded to blockstore, server will update it's fileCollection
       response = builder.setResult(WriteResult.Result.OLD_VERSION).build();
       responseObserver.onNext(response);
       responseObserver.onCompleted();
-      return;
+      return proto_buf.WriteResult{proto_buf.OLD_VERSION};
   }
 
   // check whether all blocks are in block store
@@ -69,6 +69,12 @@ are uploaded to blockstore, server will update it's fileCollection
 
   // notify client there are missing blocks
   if(len(missingBlockList) != 0){
-    return;
+    return proto_buf.WriteResult{
+      proto_buf.MISSING_BLOCKS, cur_version, missingBlockList
+      };
   }
+
+  // passing all checks, add blockto fileCollection
+  s.fileCollection[fname] = file
+  return proto_buf.WriteResult{proto_buf.OK, upload_version}
 }

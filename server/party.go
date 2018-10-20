@@ -11,30 +11,18 @@ import (
 	"path/filepath"
 	"net/http"
 	"os"
-	"os/exec"
-	"os/signal"
 	gopath "path"
 	pf"path/filepath"
 	"strings"
-	"syscall"
-	"time"
 	"log"
-
-	"github.com/Jeffail/leaps/lib/acl"
-	"github.com/Jeffail/leaps/lib/api"
-	"github.com/Jeffail/leaps/lib/audit"
-	"github.com/Jeffail/leaps/lib/curator"
-	"github.com/Jeffail/leaps/lib/store"
-	"github.com/Jeffail/leaps/lib/util"
-	"github.com/Jeffail/leaps/lib/util/service/log"
-	"github.com/Jeffail/leaps/lib/util/service/metrics"
-	"github.com/gorilla/websocket"
+	"utils"
 )
 
 func init(){
   // init metadata store
 	meatdataStore := MetadataStore.NewMetadataStore()
-  // scan all local files and prepares them
+
+  // scan all local files and stores them in MetatdataStore
 	if pwd, err := os.Getwd(); err != nil{
 		log.Fatal(err)
 	}else{
@@ -45,11 +33,15 @@ func init(){
 			}
 			fmt.Printf("visited file or dir: %q\n", path)
 			// put the file into our metatdata store
-			//
+			utils.UploadFile(ms, path)
 			return nil
 		})
 	}
 
+	// TODO: setup come configuration
+}
 
+func main(){
+	// start serving MeataDataStore
 
 }

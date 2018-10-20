@@ -26,10 +26,30 @@ type Block struct {
   data string
 }
 
+(Block b) Hash(){
+  return b.hash
+}
+
+(Block b) Data{
+  return data
+}
+
 type WriteResult {
   result Result
   current_version int32
   missing_blocks []string
+}
+
+(WriteResult wr) Result(){
+  return wr.result
+}
+
+(WriteResult wr) CurrentVersion(){
+  return wr.current_version
+}
+
+(WriteResult wr) MissingBlocks(){
+  return wr.missing_blocks
 }
 
 type SimpleAnswer struct{

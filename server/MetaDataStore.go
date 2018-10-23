@@ -25,6 +25,7 @@ NewMetadataStore(){
   ms.blockStore = BlockStore.NewBlockStore()
   return ms
 }
+
 /*
 Read and return the requested file
 return FileInfo object to the client

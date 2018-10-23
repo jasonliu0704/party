@@ -1,14 +1,14 @@
 package proto_buf
 
 type FileInfo struct{
-  filename string
-  version int32
-  blocklist []string
+  Filename string     `json:"file_name"`
+  Version int32       `json:"version"`
+  Blocklist []string  `json:"block_list"`
 }
 
 (FileInfo f) addAllBlocklist (blocks []string){
   for block := blocks{
-    append(f.blocklist, block)
+    append(f.Blocklist, block)
   }
 }
 
@@ -22,41 +22,21 @@ const(
 )
 
 type Block struct {
-  hash string
-  data string
-}
-
-(Block b) Hash(){
-  return b.hash
-}
-
-(Block b) Data{
-  return data
+  Hash string   `json:"hash"`
+  Data string   `json:"data"`
 }
 
 type WriteResult {
-  result Result
-  current_version int32
-  missing_blocks []string
-}
-
-(WriteResult wr) Result(){
-  return wr.result
-}
-
-(WriteResult wr) CurrentVersion(){
-  return wr.current_version
-}
-
-(WriteResult wr) MissingBlocks(){
-  return wr.missing_blocks
+  Result Result           `json:"result"`
+  Current_version int32   `json:"current_version"`
+  Missing_blocks []string `json:"missing_blocks"`
 }
 
 type SimpleAnswer struct{
-  answer bool
+  Answer bool   `json:"answer"`
 }
 type NodeList struct{
-  nodeList []int32
+  NodeList []int32    `json:"node_list"`
 }
 
 type Empty struct{}
